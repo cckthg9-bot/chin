@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="zh-HK" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《論孝》温習及背誦平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lab: {
+                            bg: '#16251c',
+                            grid: '#213629',
+                            card: '#f4f0e4',
+                            cardHeader: '#ea2dd',
+                            textDark: '#1a261d',
+                            textLight: '#e4ece5',
+                            textMuted: '#94a899',
+                            greenBtn: '#6da04b',
+                            greenBtnHover: '#5d8b3e',
+                            greenAccent: '#89c355',
+                            tagBg: '#213326',
+                            borderDark: '#131e17'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                        serifTC: ['"Noto Serif TC"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Lab Grid Background Pattern */
+        body {
+            background-color: #16251c;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #6da04b;
+            border-radius: 3px;
+        }
+
+        /* Flip Card Logic */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Retro Lab Offset Shadow */
+        .lab-card-shadow {
+            box-shadow: 4px 4px 0px #0b140e;
+        }
+        .lab-btn-shadow {
+            box-shadow: 2px 2px 0px #111a13;
+        }
+    </style>
+</head>
+<body class="text-lab-textLight font-sans min-h-full flex flex-col antialiased selection:bg-lab-greenAccent selection:text-black">
+
+    <header class="w-full max-w-7xl mx-auto pt-6 px-4 sm:px-8">
+        <!-- Logo & Top Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-lab-grid">
+            <div class="flex items-center space-x-3">
+                <!-- Icon Box resembling Block Optics Lab -->
+                <div class="w-10 h-10 bg-lab-greenBtn rounded border-2 border-lab-borderDark flex items-center justify-center p-1 font-black text-black text-xl shadow">
+                    <div class="w-full h-full border border-black/40 flex items-center justify-center bg-[#81b25d]">
+                        孝
+                    </div>
+                </div>
+                <div>
+                    <div class="text-[10px] tracking-widest uppercase font-bold text-lab-greenAccent">DSE 文言指定閱讀篇章</div>
+                    <h1 class="text-lg sm:text-xl font-black text-white tracking-wide">《論孝》温習及背誦平台</h1>
+                </div>
+            </div>
+
+            <!-- Speech Language Switcher & Controls -->
+            <div class="flex items-center space-x-3 text-xs">
+                <span class="text-lab-textMuted hidden sm:inline">發音選擇：</span>
+                <div class="flex bg-lab-tagBg border border-lab-grid rounded p-0.5">
+                    <button onclick="setLang('zh-HK')" id="lang-cantonese" class="px-2.5 py-1 rounded bg-lab-greenBtn text-lab-textDark font-bold transition">粵語</button>
+                    <button onclick="setLang('zh-CN')" id="lang-mandarin" class="px-2.5 py-1 rounded text-lab-textMuted hover:text-white transition">普通話</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banner & Mode Indicator -->
+        <div class="py-6 space-y-2">
+            <div class="inline-block px-3 py-1 bg-lab-tagBg text-lab-greenAccent border border-lab-grid text-xs font-bold rounded">
+                選擇一個温習單元
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-black text-white tracking-tight">
+                分析《論孝》全文、意涵 及 背誦訓練（地獄式）
+            </h2>
+            <p class="text-sm text-lab-textMuted max-w-3xl">
+                點擊下方功能選擇温習單元🙂
+            </p>
+        </div>
+
+        <nav class="flex space-x-2 overflow-x-auto custom-scrollbar pb-3 text-xs sm:text-sm font-bold">
+            <button onclick="switchTab('tab-read')" id="nav-tab-read" class="tab-btn px-4 py-2 rounded border border-lab-borderDark bg-lab-greenBtn text-lab-textDark font-black flex items-center whitespace-nowrap shadow">
+                <i class="fa-solid fa-book-open mr-2"></i>全文研讀
+            </button>
+            <button onclick="switchTab('tab-cloze')" id="nav-tab-cloze" class="tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition">
+                <i class="fa-solid fa-pen-ruler mr-2"></i>背誦填空
+            </button>
+            <button onclick="switchTab('tab-scramble')" id="nav-tab-scramble" class="tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition">
+                <i class="fa-solid fa-puzzle-piece mr-2"></i>重組句子
+            </button>
+            <button onclick="switchTab('tab-quiz')" id="nav-tab-quiz" class="tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition">
+                <i class="fa-solid fa-circle-question mr-2"></i>文意測驗
+            </button>
+            <button onclick="switchTab('tab-cards')" id="nav-tab-cards" class="tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition">
+                <i class="fa-solid fa-clone mr-2"></i>記憶卡片
+            </button>
+            <button onclick="switchTab('tab-dictate')" id="nav-tab-dictate" class="tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition">
+                <i class="fa-solid fa-check-double mr-2"></i>默寫比對
+            </button>
+        </nav>
+    </header>
+
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-8 py-6">
+
+        <!-- TAB 1: READ & ANNOTATIONS -->
+        <section id="tab-read" class="tab-content block space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-lab-tagBg p-4 rounded border border-lab-grid">
+                <div>
+                    <h3 class="text-base font-bold text-white flex items-center">
+                        <span class="w-2 h-2 rounded-full bg-lab-greenAccent mr-2"></span>《論孝》原文研讀
+                    </h3>
+                    <p class="text-xs text-lab-textMuted mt-0.5">點擊螢光詞語檢視字詞註釋與考點，或點擊🔊收聽發音。</p>
+                </div>
+                <button onclick="toggleAllTranslations()" class="px-3 py-1.5 bg-lab-grid hover:bg-stone-700 text-xs font-bold text-white rounded border border-lab-grid transition">
+                    <i class="fa-solid fa-language mr-1.5"></i>顯示/隱藏全部譯文
+                </button>
+            </div>
+
+            <!-- Passages Grid Container -->
+            <div id="reader-passages-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamically populated passages cards -->
+            </div>
+        </section>
+
+        <section id="tab-cloze" class="tab-content hidden space-y-6">
+            <div class="bg-lab-card text-lab-textDark p-6 rounded border-2 border-lab-borderDark lab-card-shadow space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-300">
+                    <div>
+                        <div class="text-xs font-black uppercase tracking-wider text-stone-500">PRACTICE MODULE</div>
+                        <h2 class="text-xl font-black text-black">背誦填空測驗</h2>
+                        <p class="text-xs text-stone-600">選擇難度，填寫缺漏字詞以強化文言文記憶。</p>
+                    </div>
+                    <!-- Difficulty Switcher -->
+                    <div class="flex items-center space-x-1 bg-stone-200 p-1 rounded border border-stone-300 text-xs font-bold">
+                        <button onclick="setClozeDifficulty('easy')" id="diff-easy" class="px-3 py-1.5 rounded bg-lab-greenBtn text-black shadow">初級（關鍵字）</button>
+                        <button onclick="setClozeDifficulty('medium')" id="diff-medium" class="px-3 py-1.5 rounded text-stone-600 hover:text-black">中級（半隱藏）</button>
+                        <button onclick="setClozeDifficulty('hard')" id="diff-hard" class="px-3 py-1.5 rounded text-stone-600 hover:text-black">高級（挑戰）</button>
+                    </div>
+                </div>
+
+                <!-- Inputs Area -->
+                <div id="cloze-content" class="space-y-6">
+                    <!-- Dynamic Cloze Inputs -->
+                </div>
+
+                <!-- Action Toolbar -->
+                <div class="pt-4 border-t border-stone-300 flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex space-x-3">
+                        <button onclick="checkClozeAnswers()" class="px-5 py-2.5 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black font-black rounded border border-black lab-btn-shadow transition text-sm flex items-center">
+                            <i class="fa-solid fa-check mr-2"></i>核對答案
+                        </button>
+                        <button onclick="resetClozeInputs()" class="px-4 py-2.5 bg-stone-200 text-stone-800 font-bold rounded border border-stone-400 hover:bg-stone-300 transition text-sm">
+                            重新填寫
+                        </button>
+                    </div>
+                    <div id="cloze-score-badge" class="hidden px-4 py-2 bg-stone-900 text-white font-bold rounded text-sm flex items-center">
+                        <i class="fa-solid fa-trophy text-amber-400 mr-2"></i>得分：<span id="cloze-score" class="text-lab-greenAccent font-black ml-1">0 / 0</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-scramble" class="tab-content hidden space-y-6">
+            <div class="bg-lab-card text-lab-textDark p-6 rounded border-2 border-lab-borderDark lab-card-shadow space-y-6">
+                <div class="flex justify-between items-center pb-4 border-b border-stone-300">
+                    <div>
+                        <div class="text-xs font-black uppercase tracking-wider text-stone-500">INTERACTIVE GAME</div>
+                        <h2 class="text-xl font-black text-black">重組句子遊戲</h2>
+                    </div>
+                    <div class="text-xs font-bold bg-stone-200 px-3 py-1 rounded border border-stone-300">
+                        進度：<span id="scramble-progress" class="text-lab-greenBtnHover font-black">1 / 4</span>
+                    </div>
+                </div>
+
+                <!-- Target Prompt Card -->
+                <div class="bg-white p-4 rounded border-2 border-stone-300 space-y-2">
+                    <span class="text-[10px] font-black uppercase text-stone-400">文意提示 / 題目說明</span>
+                    <p id="scramble-prompt" class="text-sm sm:text-base font-bold text-stone-800">
+                        [ 題目提示加載中... ]
+                    </p>
+                </div>
+
+                <!-- User Construction Zone -->
+                <div class="bg-stone-200/80 p-4 rounded border-2 border-dashed border-stone-400 min-h-[90px] flex flex-wrap gap-2 items-center">
+                    <span class="text-xs text-stone-400 font-bold w-full mb-1">點擊下方詞牌組成原句：</span>
+                    <div id="scramble-user-area" class="flex flex-wrap gap-2 min-h-[40px] w-full">
+                        <!-- User tiles appear here -->
+                    </div>
+                </div>
+
+                <!-- Word Tiles Pool -->
+                <div class="space-y-2">
+                    <span class="text-xs font-bold text-stone-500">備選詞牌庫：</span>
+                    <div id="scramble-pool-area" class="flex flex-wrap gap-2 p-3 bg-stone-100 rounded border border-stone-300 min-h-[60px]">
+                        <!-- Available tiles -->
+                    </div>
+                </div>
+
+                <!-- Game Actions -->
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="clearScramble()" class="px-4 py-2 bg-stone-200 hover:bg-stone-300 text-stone-800 font-bold text-xs rounded border border-stone-400">
+                        <i class="fa-solid fa-rotate-left mr-1"></i>重置選項
+                    </button>
+                    <div class="flex space-x-2">
+                        <button onclick="checkScramble()" class="px-5 py-2 bg-black hover:bg-stone-800 text-white font-bold text-xs rounded shadow">
+                            檢查答案
+                        </button>
+                        <button onclick="nextScramble()" id="btn-next-scramble" class="px-5 py-2 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black font-black text-xs rounded border border-black lab-btn-shadow">
+                            下一題 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="scramble-feedback" class="text-center font-black text-base min-h-[24px]"></div>
+            </div>
+        </section>
+
+        <section id="tab-quiz" class="tab-content hidden space-y-6">
+            <div class="bg-lab-card text-lab-textDark p-6 rounded border-2 border-lab-borderDark lab-card-shadow space-y-6">
+                <div class="flex justify-between items-center pb-4 border-b border-stone-300">
+                    <div>
+                        <div class="text-xs font-black uppercase tracking-wider text-stone-500">EXAM EVALUATION</div>
+                        <h2 class="text-xl font-black text-black">文言字詞與文意理解測驗</h2>
+                    </div>
+                    <span id="quiz-count" class="text-xs font-bold bg-stone-200 px-3 py-1 rounded border border-stone-300">問題 1 / 6</span>
+                </div>
+
+                <!-- Quiz Card -->
+                <div id="quiz-card" class="space-y-4">
+                    <!-- Dynamic Quiz Content -->
+                </div>
+
+                <div class="flex justify-between items-center pt-4 border-t border-stone-300">
+                    <button onclick="prevQuizQuestion()" id="btn-quiz-prev" class="px-4 py-2 bg-stone-200 text-stone-800 font-bold text-xs rounded border border-stone-400 disabled:opacity-40">
+                        <i class="fa-solid fa-chevron-left mr-1"></i>上一題
+                    </button>
+                    <button onclick="nextQuizQuestion()" id="btn-quiz-next" class="px-5 py-2 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black font-black text-xs rounded border border-black lab-btn-shadow">
+                        下一題 <i class="fa-solid fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-cards" class="tab-content hidden space-y-6">
+            <div class="bg-lab-card text-lab-textDark p-6 rounded border-2 border-lab-borderDark lab-card-shadow space-y-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <div class="text-xs font-black uppercase tracking-wider text-stone-500">FLASH CARDS</div>
+                        <h2 class="text-xl font-black text-black">《論孝》記憶卡片</h2>
+                    </div>
+                    <span class="text-xs font-bold bg-stone-200 px-3 py-1 rounded border border-stone-300" id="card-index-indicator">
+                        1 / 4
+                    </span>
+                </div>
+
+                <!-- Card container -->
+                <div class="max-w-xl mx-auto">
+                    <div id="flashcard-container" onclick="flipCard()" class="flip-card cursor-pointer w-full h-80 sm:h-96">
+                        <div id="flip-card-inner" class="flip-card-inner relative w-full h-full text-center shadow-md rounded-lg">
+                            <!-- Card Front -->
+                            <div class="flip-card-front absolute w-full h-full bg-stone-900 text-white rounded-lg p-6 flex flex-col justify-between border-2 border-stone-700">
+                                <div class="text-[10px] uppercase font-bold tracking-widest text-lab-greenAccent flex justify-between">
+                                    <span>原文記憶面</span>
+                                    <span><i class="fa-solid fa-rotate-right mr-1"></i>點擊翻轉</span>
+                                </div>
+                                <div id="card-front-text" class="text-xl sm:text-2xl font-serifTC leading-relaxed my-auto">
+                                    <!-- Front text -->
+                                </div>
+                                <div class="text-xs text-stone-400" id="card-front-source">
+                                    《論語》選段
+                                </div>
+                            </div>
+
+                            <!-- Card Back -->
+                            <div class="flip-card-back absolute w-full h-full bg-white text-stone-900 rounded-lg p-6 flex flex-col justify-between border-2 border-stone-400 text-left overflow-y-auto custom-scrollbar">
+                                <div class="text-[10px] font-bold text-stone-500 uppercase flex justify-between">
+                                    <span>譯文與考點解析</span>
+                                    <span><i class="fa-solid fa-rotate-right mr-1"></i>點擊翻回正面</span>
+                                </div>
+                                <div class="my-auto space-y-3">
+                                    <div>
+                                        <h4 class="text-xs font-black text-lab-greenBtnHover mb-1">【白話語譯】</h4>
+                                        <p id="card-back-translation" class="text-sm leading-relaxed text-stone-800">
+                                            <!-- Translation -->
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-black text-stone-700 mb-1">【考點重點】</h4>
+                                        <p id="card-back-key" class="text-xs text-stone-600">
+                                            <!-- Key point -->
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-[10px] text-stone-400 text-right">
+                                    可隨時點擊翻轉
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-center items-center space-x-4">
+                    <button onclick="prevCard()" class="px-5 py-2 bg-stone-200 text-black font-bold text-xs rounded border border-stone-400 hover:bg-stone-300">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i>上一張
+                    </button>
+                    <button onclick="nextCard()" class="px-5 py-2 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black font-black text-xs rounded border border-black lab-btn-shadow">
+                        下一張 <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-dictate" class="tab-content hidden space-y-6">
+            <div class="bg-lab-card text-lab-textDark p-6 rounded border-2 border-lab-borderDark lab-card-shadow space-y-6">
+                <div>
+                    <div class="text-xs font-black uppercase tracking-wider text-stone-500">VERBATIM ACCURACY TEST</div>
+                    <h2 class="text-xl font-black text-black">默寫比對與精準度檢測</h2>
+                    <p class="text-xs text-stone-600 mt-1">請在左框憑記憶默寫《論孝》內容，系統會與原文精準比對並計算正確率。</p>
+                </div>
+
+                <!-- Chapter Selector -->
+                <div class="flex items-center space-x-3 text-xs">
+                    <span class="font-bold text-stone-700">選擇章節：</span>
+                    <select id="dictate-passage-select" onchange="resetDictationArea()" class="bg-white border border-stone-400 rounded px-3 py-1.5 font-bold text-xs">
+                        <option value="all">全部章節</option>
+                        <option value="0">第五章：孟懿子問孝</option>
+                        <option value="1">第六章：子游問孝</option>
+                        <option value="2">第七章：事父母幾諫</option>
+                        <option value="3">第八章：父母之年</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- User Input Area -->
+                    <div class="flex flex-col space-y-1">
+                        <label class="text-[10px] font-black uppercase text-stone-500">請在此輸入默寫內容：</label>
+                        <textarea id="dictate-input" rows="9" placeholder="在此處輸入您默寫的《論孝》內容（標點符號不計入錯漏）..." class="w-full p-3 bg-white border border-stone-300 rounded font-serifTC text-base leading-relaxed resize-none focus:outline-none focus:border-black custom-scrollbar"></textarea>
+                    </div>
+
+                    <!-- Comparison Result View -->
+                    <div class="flex flex-col space-y-1">
+                        <label class="text-[10px] font-black uppercase text-stone-500">即時比對分析結果：</label>
+                        <div id="dictate-result" class="w-full h-56 md:h-auto p-4 bg-stone-100 border border-stone-300 rounded font-serifTC text-base leading-relaxed overflow-y-auto custom-scrollbar flex flex-col justify-center items-center text-stone-400">
+                            <i class="fa-solid fa-spell-check text-3xl mb-2"></i>
+                            <p class="text-xs font-bold">點擊下方「開始比對」顯示結果</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions & Score -->
+                <div class="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-stone-300">
+                    <div class="flex space-x-3">
+                        <button onclick="evaluateDictation()" class="px-5 py-2.5 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black font-black text-xs rounded border border-black lab-btn-shadow flex items-center">
+                            <i class="fa-solid fa-chart-simple mr-2"></i>開始比對
+                        </button>
+                        <button onclick="clearDictation()" class="px-4 py-2.5 bg-stone-200 text-stone-800 font-bold text-xs rounded border border-stone-400">
+                            清空重填
+                        </button>
+                    </div>
+
+                    <div id="dictate-score-card" class="hidden flex items-center space-x-3 bg-black text-white px-4 py-2 rounded">
+                        <span class="text-xs font-bold text-stone-400">背誦準確度：</span>
+                        <span id="dictate-percentage" class="text-xl font-black text-lab-greenAccent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full max-w-7xl mx-auto px-4 sm:px-8 py-6 border-t border-lab-grid text-xs text-lab-textMuted flex flex-wrap justify-between items-center gap-2">
+        <div>HKDSE——CHIN</div>
+    </footer>
+
+    <div id="annotation-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-lab-card text-lab-textDark max-w-md w-full rounded border-2 border-black p-6 shadow-2xl relative space-y-4">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-500 hover:text-black text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center space-x-3 border-b border-stone-300 pb-3">
+                <span id="modal-term" class="text-2xl font-black text-black font-serifTC">詞語</span>
+            </div>
+            <div>
+                <h4 class="text-[10px] font-black uppercase tracking-wider text-stone-500 mb-1">字詞釋義與詞性</h4>
+                <p id="modal-definition" class="text-sm text-stone-800 leading-relaxed font-sans font-medium">
+                    解釋內容...
+                </p>
+            </div>
+            <div class="bg-white p-3 rounded border border-stone-300 text-xs text-stone-700">
+                <span class="font-bold text-black">考試提示：</span><span id="modal-note">高頻考核字詞。</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Structure for Lun Xiao (論孝)
+        const lunXiaoData = [
+            {
+                id: 1,
+                chapter: "《為政》第二 (5)",
+                title: "孟懿子問孝",
+                rawText: "孟懿子問孝。子曰：「無違。」樊遲御，子告之曰：「孟孫問孝於我，我對曰，無違。」樊遲曰：「何謂也？」子曰：「生，事之以禮；死，葬之以禮，祭之以禮。」",
+                sentences: [
+                    {
+                        original: "孟懿子問孝。子曰：「無違。」",
+                        translation: "孟懿子向孔子請問甚麼是孝。孔子回答說：「不要違背禮節。」",
+                        audioText: "孟懿子問孝。子曰：無違。"
+                    },
+                    {
+                        original: "樊遲御，子告之曰：「孟孫問孝於我，我對曰，無違。」",
+                        translation: "後來樊遲替孔子駕車，孔子告訴他說：「孟孫向我問孝，我回答他說：『不要違背禮節。』」",
+                        audioText: "樊遲御，子告之曰：孟孫問孝於我，我對曰，無違。"
+                    },
+                    {
+                        original: "樊遲曰：「何謂也？」子曰：「生，事之以禮；死，葬之以禮，祭之以禮。」",
+                        translation: "樊遲問：「這是甚麼意思呢？」孔子說：「父母活著時，依禮節侍奉他們；父母去世時，依禮節安葬他們，依禮節祭祀他們。」",
+                        audioText: "樊遲曰：何謂也？子曰：生，事之以禮；死，葬之以禮，祭之以禮。"
+                    }
+                ],
+                annotations: {
+                    "孟懿子": { def: "魯國大夫，姓仲孫，名獲，諡號懿。孟孫氏。", note: "向孔子問孝者之一。" },
+                    "無違": { def: "不違背禮節（並非順從父母的一切要求，而是合乎禮義）。", note: "重點字詞！「違」指違背禮法。" },
+                    "樊遲": { def: "孔子的弟子，名須，字子遲。", note: "當時為孔子駕車。" },
+                    "御": { def: "動詞，駕馭車馬，引申為駕車。", note: "古漢語常見動詞。" },
+                    "孟孫": { def: "即孟懿子。", note: "魯國三桓之一。" },
+                    "事之以禮": { def: "以：按照。依據禮節侍奉父母。", note: "介詞「以」表示「按、依據」。" },
+                    "祭之以禮": { def: "依照禮節祭祀父母。", note: "強調孝道貫穿父母生前與死後。" }
+                },
+                keyPoint: "孝順的核心在於「合乎禮節」，無論父母生前死後，皆應恪守禮制規範。"
+            },
+            {
+                id: 2,
+                chapter: "《為政》第二 (6)",
+                title: "子游問孝",
+                rawText: "子游問孝。子曰：「今之孝者，是謂能養。至於犬馬，皆能有養；不敬，何以別乎！」",
+                sentences: [
+                    {
+                        original: "子游問孝。子曰：「今之孝者，是謂能養。」",
+                        translation: "子游向孔子請問甚麼是孝。孔子說：「現在所謂的孝順，只是說能夠撫養父母。」",
+                        audioText: "子游問孝。子曰：今之孝者，是謂能養。"
+                    },
+                    {
+                        original: "「至於犬馬，皆能有養；不敬，何以別乎！」",
+                        translation: "「對於狗和馬，都能得到人的飼養；如果對父母不恭敬，那養父母與養犬馬又有甚麼分別呢！」",
+                        audioText: "至於犬馬，皆能有養；不敬，何以別乎！"
+                    }
+                ],
+                annotations: {
+                    "子游": { def: "孔子弟子，姓言，名偃，字子游。", note: "以文學著稱。" },
+                    "能養": { def: "養：音「樣」，動詞。能夠供給父母飲食衣履等生活所需。", note: "僅指物質上的供養。" },
+                    "犬馬": { def: "狗與馬，借指飼養的動物。", note: "用作對比說明敬意之重要。" },
+                    "不敬": { def: "沒有恭敬尊敬之心。", note: "孝順的核心靈魂在於「敬」。" },
+                    "何以別乎": { def: "何以：即「以何」，憑什麼。別：分別。憑什麼來區別呢！", note: "倒裝句式，強調若缺敬意，物質供養與養動物無異。" }
+                },
+                keyPoint: "孝順的本質在於內心的「恭敬（敬）」，光有物質供養而缺乏敬意，不能算真正的孝。"
+            },
+            {
+                id: 3,
+                chapter: "《里仁》第四 (7)",
+                title: "事父母幾諫",
+                rawText: "子曰：「事父母幾諫，見志不從，又敬不違，勞而不怨。」",
+                sentences: [
+                    {
+                        original: "子曰：「事父母幾諫，見志不從，又敬不違，勞而不怨。」",
+                        translation: "孔子說：「侍奉父母，如果父母有過錯，要委婉地勸諫；看到自己的勸諫心志未被採納，依然要恭敬而不違抗，雖然憂心勞苦也不生怨恨。」",
+                        audioText: "子曰：事父母幾諫，見志不從，又敬不違，勞而不怨。"
+                    }
+                ],
+                annotations: {
+                    "幾諫": { def: "幾：音「機」，微弱、委婉。幾諫：委婉地勸諫父母。", note: "高頻考點！勸諫父母態度須溫和委婉。" },
+                    "見志不從": { def: "看到自己的意願（勸諫）沒有被父母採納接受。", note: "從：聽從、採納。" },
+                    "又敬不違": { def: "依然保持恭敬，不冒犯頂撞父母。", note: "違：違抗、冒犯。" },
+                    "勞而不怨": { def: "勞：憂慮、操勞。雖然內心憂傷操勞，卻不怨恨父母。", note: "體現子女對父母無私的愛與孝心。" }
+                },
+                keyPoint: "侍奉有過失的父母，應「委婉勸諫」；若勸諫不聽，仍要「恭敬不違」、「勞而不怨」。"
+            },
+            {
+                id: 4,
+                chapter: "《里仁》第四 (8)",
+                title: "父母之年不可不知",
+                rawText: "子曰：「父母之年，不可不知也。一則以喜，一則以懼。」",
+                sentences: [
+                    {
+                        original: "子曰：「父母之年，不可不知也。一則以喜，一則以懼。」",
+                        translation: "孔子說：「父母的年歲，不能不牢記在心。一方面因父母健康長壽而高興，另一方面因父母年事已高、來日無多而恐懼。」",
+                        audioText: "子曰：父母之年，不可不知也。一則以喜，一則以懼。"
+                    }
+                ],
+                annotations: {
+                    "不可不知": { def: "不能不牢記在心。", note: "強調時刻關懷父母年歲。" },
+                    "一則以喜": { def: "一方面因為父母健康高壽而歡喜。", note: "喜：因父母長壽。" },
+                    "一則以懼": { def: "另一方面因為父母年事已高、衰老逼近而恐懼擔憂。", note: "懼：因父母衰老將逝。" }
+                },
+                keyPoint: "子女應時刻掛念父母年歲，內心懷著喜悅（慶幸長壽）與恐懼（憂心衰老）交織的情感，及時行孝。"
+            }
+        ];
+
+        // Cloze Practice Data
+        const clozeData = {
+            easy: [
+                { passageId: 1, text: "孟懿子問孝。子曰：「[無違]。」樊遲御，子告之曰：「孟孫問孝於我，我對曰，[無違]。」樊遲曰：「何謂也？」子曰：「生，[事之以禮]；死，[葬之以禮]，[祭之以禮]。」" },
+                { passageId: 2, text: "子游問孝。子曰：「今之孝者，是謂[能養]。至於犬馬，皆能[有養]；[不敬]，何以別乎！」" },
+                { passageId: 3, text: "子曰：「事父母[幾諫]，見志不從，又敬[不違]，[勞而不怨]。」" },
+                { passageId: 4, text: "子曰：「父母之年，不可不知也。[一則以喜]，[一則以懼]。」" }
+            ],
+            medium: [
+                { passageId: 1, text: "孟懿子問孝。子曰：「[無違]。」樊遲[御]，子告之曰：「[孟孫]問孝於我，我對曰，無違。」樊遲曰：「[何謂也]？」子曰：「生，事之[以禮]；死，葬之[以禮]，祭之[以禮]。」" },
+                { passageId: 2, text: "子游問孝。子曰：「今之[孝者]，是謂[能養]。至於[犬馬]，皆能[有養]；[不敬]，[何以別乎]！」" },
+                { passageId: 3, text: "子曰：「事父母[幾諫]，見志[不從]，又[敬而不違]，[勞而不怨]。」" },
+                { passageId: 4, text: "子曰：「[父母之年]，不可[不知也]。[一則以喜]，[一則以懼]。」" }
+            ],
+            hard: [
+                { passageId: 1, text: "孟懿子問孝。子曰：「[無違]。」[樊遲御]，子告之曰：「[孟孫問孝於我]，我對曰，[無違]。」樊遲曰：「[何謂也]？」子曰：「生，[事之以禮]；死，[葬之以禮]，[祭之以禮]。」" },
+                { passageId: 2, text: "子游問孝。子曰：「[今之孝者]，[是謂能養]。[至於犬馬]，[皆能有養]；[不敬]，[何以別乎]！」" },
+                { passageId: 3, text: "子曰：「[事父母幾諫]，[見志不從]，[又敬不違]，[勞而不怨]。」" },
+                { passageId: 4, text: "子曰：「[父母之年]，[不可不知也]。[一則以喜]，[一則以懼]。」" }
+            ]
+        };
+
+        // Scramble Sentences Game Data
+        const scrambleQuestions = [
+            {
+                prompt: "【孟懿子問孝】孔子對答的核心原則（生、死、祭祀）：",
+                correctTiles: ["生，", "事之以禮；", "死，", "葬之以禮，", "祭之以禮。"],
+                extraTiles: ["養之以敬；", "無違於禮。", "親之以順；"]
+            },
+            {
+                prompt: "【子游問孝】孔子指出孝與養犬馬關鍵區別之句：",
+                correctTiles: ["至於犬馬，", "皆能有養；", "不敬，", "何以別乎！"],
+                extraTiles: ["不能無敬，", "何以養之！", "是謂能養；"]
+            },
+            {
+                prompt: "【事父母幾諫】父母不聽勸諫時，子女應有的態度：",
+                correctTiles: ["見志不從，", "又敬不違，", "勞而不怨。"],
+                extraTiles: ["怒而不言，", "違而不敬，", "諫而不止，"]
+            },
+            {
+                prompt: "【父母之年】子女對父母年歲的兩種複雜情感：",
+                correctTiles: ["父母之年，", "不可不知也。", "一則以喜，", "一則以懼。"],
+                extraTiles: ["一則以憂，", "不可忘也。", "一則以傷，"]
+            }
+        ];
+
+        // Multiple Choice Quiz Questions
+        const quizQuestions = [
+            {
+                question: "1. 孔子回答孟懿子問孝時說「無違」，根據後文孔子的解釋，「無違」具體指的是甚麼？",
+                options: [
+                    "A. 百依百順，絕不違抗父母的任何要求",
+                    "B. 不違背禮節（生事、死葬、祭祀皆依禮）",
+                    "C. 不違背國家的法律與社會規範",
+                    "D. 不違背長輩傳下的家訓與志向"
+                ],
+                answer: 1,
+                explanation: "正確答案為 B。孔子向樊遲解釋「無違」是指「生，事之以禮；死，葬之以禮，祭之以禮」，即行孝須合乎禮節。"
+            },
+            {
+                question: "2. 在「事父母幾諫」中，「幾諫」的「幾」字涵義為何？",
+                options: [
+                    "A. 多次、頻繁地勸諫",
+                    "B. 微弱、委婉地勸諫",
+                    "C. 幾何、算計地勸諫",
+                    "D. 幾乎、差一點勸諫"
+                ],
+                answer: 1,
+                explanation: "正確答案為 B。「幾」意為微弱、委婉，指勸諫父母時態度要輕柔委婉。"
+            },
+            {
+                question: "3. 「至於犬馬，皆能有養；不敬，何以別乎！」這句話使用了何種修辭與句式？",
+                options: [
+                    "A. 設問與比喻句",
+                    "B. 反問（反詰）與對比句",
+                    "C. 誇飾與感嘆句",
+                    "D. 借代與平行對仗"
+                ],
+                answer: 1,
+                explanation: "正確答案為 B。將「養父母」與「養犬馬」進行對比，並以「何以別乎（憑什麼區別）」進行強烈的反問。"
+            },
+            {
+                question: "4. 子女對「父母之年」為何會「一則以懼」？",
+                options: [
+                    "A. 害怕父母脾氣變得古怪",
+                    "B. 害怕自己沒有足夠的能力供養父母",
+                    "C. 擔憂恐懼父母年事已高、衰老且來日無多",
+                    "D. 恐懼父母會批評自己的事業表現"
+                ],
+                answer: 2,
+                explanation: "正確答案為 C。「懼」是因為父母年紀越來越大，隨之而來的是衰老與離別，因此感到憂心與恐懼。"
+            },
+            {
+                question: "5. 「見志不從，又敬不違，勞而不怨」中的「勞」字意思為何？",
+                options: [
+                    "A. 勞力付出，體力透支",
+                    "B. 內心憂傷、操勞",
+                    "C. 勞碌奔波於官場",
+                    "D. 功勞與賞賜"
+                ],
+                answer: 1,
+                explanation: "正確答案為 B。此處「勞」指為父母過失或勸諫不成而感到內心憂愁操勞。"
+            },
+            {
+                question: "6. 綜觀《論孝》四章選段，孔子認為「孝」的最高核心精神是甚麼？",
+                options: [
+                    "A. 充足的物質供養",
+                    "B. 完美的祭祀儀式",
+                    "C. 內心的「敬」與合乎「禮」",
+                    "D. 順從父母的所有決定"
+                ],
+                answer: 2,
+                explanation: "正確答案為 C。孔子強調孝不僅是養（需有敬），且無論生死皆須「以禮」，並持敬順委婉之心。"
+            }
+        ];
+
+        // Global State Variables
+        let currentSpeechLang = 'zh-HK';
+        let currentClozeDifficulty = 'easy';
+        let currentScrambleIndex = 0;
+        let selectedScrambleTiles = [];
+        let poolScrambleTiles = [];
+        let currentQuizIndex = 0;
+        let userQuizAnswers = Array(quizQuestions.length).fill(null);
+        let currentCardIndex = 0;
+
+        // Set Speech Language
+        function setLang(lang) {
+            currentSpeechLang = lang;
+            const btnC = document.getElementById('lang-cantonese');
+            const btnM = document.getElementById('lang-mandarin');
+            if (lang === 'zh-HK') {
+                btnC.className = 'px-2.5 py-1 rounded bg-lab-greenBtn text-lab-textDark font-bold transition';
+                btnM.className = 'px-2.5 py-1 rounded text-lab-textMuted hover:text-white transition';
+            } else {
+                btnM.className = 'px-2.5 py-1 rounded bg-lab-greenBtn text-lab-textDark font-bold transition';
+                btnC.className = 'px-2.5 py-1 rounded text-lab-textMuted hover:text-white transition';
+            }
+        }
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-4 py-2 rounded border border-lab-grid bg-lab-tagBg text-lab-textMuted hover:text-white flex items-center whitespace-nowrap transition';
+            });
+
+            document.getElementById(tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabId);
+            if (activeBtn) {
+                activeBtn.className = 'tab-btn px-4 py-2 rounded border border-lab-borderDark bg-lab-greenBtn text-lab-textDark font-black flex items-center whitespace-nowrap shadow';
+            }
+
+            // Lazy Render
+            if (tabId === 'tab-scramble') initScrambleGame();
+            if (tabId === 'tab-quiz') renderQuizQuestion();
+            if (tabId === 'tab-cards') renderFlashcard();
+        }
+
+        // Speech Synthesizer
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) {
+                alert('您的瀏覽器不支援語音功能。');
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = currentSpeechLang;
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Annotation Modal Controls
+        function openModal(term, passageIndex) {
+            const annotation = lunXiaoData[passageIndex].annotations[term];
+            if (!annotation) return;
+
+            document.getElementById('modal-term').innerText = term;
+            document.getElementById('modal-definition').innerText = annotation.def;
+            document.getElementById('modal-note').innerText = annotation.note;
+            document.getElementById('annotation-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('annotation-modal').classList.add('hidden');
+        }
+
+        function renderReaderView() {
+            const container = document.getElementById('reader-passages-container');
+            container.innerHTML = '';
+
+            lunXiaoData.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-lab-card text-lab-textDark rounded border-2 border-lab-borderDark lab-card-shadow flex flex-col justify-between overflow-hidden";
+
+                // Header Top Bar inside Card
+                let cardHeader = `
+                    <div class="bg-stone-200 p-3 sm:p-4 border-b border-stone-300 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-2 py-0.5 bg-black text-lab-greenAccent text-xs font-black rounded">章節 0${p.id + 4}</span>
+                            <h3 class="text-sm sm:text-base font-black text-black">${p.title}</h3>
+                        </div>
+                        <button onclick="speakText('${p.rawText}')" class="px-2.5 py-1 bg-lab-greenBtn hover:bg-lab-greenBtnHover text-black text-xs font-bold rounded border border-black flex items-center">
+                            <i class="fa-solid fa-volume-high mr-1"></i>朗讀
+                        </button>
+                    </div>
+                `;
+
+                // Content
+                let sentencesHtml = '<div class="p-4 sm:p-5 space-y-4 flex-grow">';
+                p.sentences.forEach((s) => {
+                    let processedSentence = s.original;
+                    Object.keys(p.annotations).forEach(term => {
+                        const regex = new RegExp(term, 'g');
+                        processedSentence = processedSentence.replace(regex, `<span onclick="openModal('${term}', ${idx})" class="cursor-pointer text-emerald-900 underline font-black bg-emerald-100 hover:bg-emerald-200 px-1 rounded transition" title="檢視註釋">${term}</span>`);
+                    });
+
+                    sentencesHtml += `
+                        <div class="space-y-1 bg-white p-3.5 rounded border border-stone-300">
+                            <div class="flex justify-between items-start">
+                                <p class="text-base sm:text-lg font-serifTC font-bold text-stone-900 leading-relaxed">${processedSentence}</p>
+                                <button onclick="speakText('${s.audioText}')" class="text-stone-400 hover:text-black ml-2 p-1 text-xs">
+                                    <i class="fa-solid fa-volume-low"></i>
+                                </button>
+                            </div>
+                            <p class="translation-text text-xs text-stone-600 leading-normal hidden pt-1.5 border-t border-stone-200">
+                                <span class="font-bold text-emerald-800">【譯】</span>${s.translation}
+                            </p>
+                        </div>
+                    `;
+                });
+                sentencesHtml += '</div>';
+
+                // Footer
+                let cardFooter = `
+                    <div class="p-3 bg-stone-100 border-t border-stone-300 text-xs text-stone-700">
+                        <span class="font-bold text-black">核心考點：</span>${p.keyPoint}
+                    </div>
+                `;
+
+                card.innerHTML = cardHeader + sentencesHtml + cardFooter;
+                container.appendChild(card);
+            });
+        }
+
+        // Toggle Translation Text Visibility
+        function toggleAllTranslations() {
+            const translations = document.querySelectorAll('.translation-text');
+            translations.forEach(el => el.classList.toggle('hidden'));
+        }
+
+        function setClozeDifficulty(diff) {
+            currentClozeDifficulty = diff;
+            ['easy', 'medium', 'hard'].forEach(d => {
+                const btn = document.getElementById('diff-' + d);
+                if (d === diff) {
+                    btn.className = 'px-3 py-1.5 rounded bg-lab-greenBtn text-black shadow';
+                } else {
+                    btn.className = 'px-3 py-1.5 rounded text-stone-600 hover:text-black';
+                }
+            });
+            renderClozeView();
+        }
+
+        function renderClozeView() {
+            const container = document.getElementById('cloze-content');
+            container.innerHTML = '';
+            document.getElementById('cloze-score-badge').classList.add('hidden');
+
+            const activeList = clozeData[currentClozeDifficulty];
+
+            activeList.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded border border-stone-300 space-y-2";
+
+                let textHtml = item.text.replace(/\[(.*?)\]/g, (match, p1) => {
+                    const width = Math.max(p1.length * 20, 50);
+                    return `<input type="text" data-answer="${p1}" class="cloze-input border-b-2 border-black bg-stone-100 text-center font-serifTC text-base text-black font-bold focus:outline-none focus:border-lab-greenBtn px-1 py-0.5 mx-1" style="width: ${width}px;" placeholder="?" />`;
+                });
+
+                card.innerHTML = `
+                    <div class="text-[10px] font-black uppercase text-stone-400">段落 0${index + 1}</div>
+                    <div class="text-base sm:text-lg leading-loose font-serifTC font-medium text-stone-900">${textHtml}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function checkClozeAnswers() {
+            const inputs = document.querySelectorAll('.cloze-input');
+            let correctCount = 0;
+
+            inputs.forEach(input => {
+                const ans = input.getAttribute('data-answer').trim();
+                const userVal = input.value.trim();
+
+                if (userVal === ans) {
+                    correctCount++;
+                    input.className = 'cloze-input border-2 border-emerald-600 bg-emerald-100 text-emerald-900 rounded font-bold px-1 py-0.5 mx-1';
+                } else {
+                    input.className = 'cloze-input border-2 border-red-500 bg-red-100 text-red-900 rounded font-bold px-1 py-0.5 mx-1';
+                    input.title = `正確答案：${ans}`;
+                }
+            });
+
+            const scoreBadge = document.getElementById('cloze-score-badge');
+            document.getElementById('cloze-score').innerText = `${correctCount} / ${inputs.length}`;
+            scoreBadge.classList.remove('hidden');
+        }
+
+        function resetClozeInputs() {
+            renderClozeView();
+        }
+
+        function initScrambleGame() {
+            const q = scrambleQuestions[currentScrambleIndex];
+            document.getElementById('scramble-progress').innerText = `${currentScrambleIndex + 1} / ${scrambleQuestions.length}`;
+            document.getElementById('scramble-prompt').innerText = q.prompt;
+            document.getElementById('scramble-feedback').innerText = '';
+
+            selectedScrambleTiles = [];
+            poolScrambleTiles = [...q.correctTiles, ...q.extraTiles].sort(() => Math.random() - 0.5);
+
+            renderScrambleTiles();
+        }
+
+        function renderScrambleTiles() {
+            const userArea = document.getElementById('scramble-user-area');
+            const poolArea = document.getElementById('scramble-pool-area');
+
+            userArea.innerHTML = '';
+            poolArea.innerHTML = '';
+
+            selectedScrambleTiles.forEach((tile, idx) => {
+                const tileBtn = document.createElement('button');
+                tileBtn.className = "px-3 py-1.5 bg-black text-white font-serifTC text-sm font-bold rounded shadow hover:bg-stone-800 transition";
+                tileBtn.innerText = tile;
+                tileBtn.onclick = () => deselectTile(idx);
+                userArea.appendChild(tileBtn);
+            });
+
+            poolScrambleTiles.forEach((tile, idx) => {
+                const tileBtn = document.createElement('button');
+                tileBtn.className = "px-3 py-1.5 bg-white text-stone-900 border border-stone-400 font-serifTC text-sm font-medium rounded shadow-sm hover:border-black transition";
+                tileBtn.innerText = tile;
+                tileBtn.onclick = () => selectTile(idx);
+                poolArea.appendChild(tileBtn);
+            });
+        }
+
+        function selectTile(poolIndex) {
+            const tile = poolScrambleTiles.splice(poolIndex, 1)[0];
+            selectedScrambleTiles.push(tile);
+            renderScrambleTiles();
+        }
+
+        function deselectTile(userIndex) {
+            const tile = selectedScrambleTiles.splice(userIndex, 1)[0];
+            poolScrambleTiles.push(tile);
+            renderScrambleTiles();
+        }
+
+        function clearScramble() {
+            initScrambleGame();
+        }
+
+        function checkScramble() {
+            const q = scrambleQuestions[currentScrambleIndex];
+            const userSentence = selectedScrambleTiles.join('');
+            const targetSentence = q.correctTiles.join('');
+
+            const feedback = document.getElementById('scramble-feedback');
+            if (userSentence === targetSentence) {
+                feedback.className = "text-center font-black text-emerald-700";
+                feedback.innerText = "🎉 答對了！組合完全正確！";
+            } else {
+                feedback.className = "text-center font-black text-red-600";
+                feedback.innerText = "❌ 順序有誤或選錯詞牌，請重試！";
+            }
+        }
+
+        function nextScramble() {
+            currentScrambleIndex = (currentScrambleIndex + 1) % scrambleQuestions.length;
+            initScrambleGame();
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            document.getElementById('quiz-count').innerText = `問題 ${currentQuizIndex + 1} / ${quizQuestions.length}`;
+
+            const card = document.getElementById('quiz-card');
+            const selectedAns = userQuizAnswers[currentQuizIndex];
+
+            let optionsHtml = '';
+            q.options.forEach((opt, idx) => {
+                let btnStyle = "w-full text-left p-3 rounded border border-stone-300 bg-white hover:border-black transition text-sm font-medium";
+
+                if (selectedAns !== null) {
+                    if (idx === q.answer) {
+                        btnStyle = "w-full text-left p-3 rounded border-2 border-emerald-600 bg-emerald-100 text-emerald-900 font-bold text-sm";
+                    } else if (idx === selectedAns) {
+                        btnStyle = "w-full text-left p-3 rounded border-2 border-red-500 bg-red-100 text-red-900 text-sm";
+                    }
+                }
+
+                optionsHtml += `
+                    <button onclick="selectQuizAnswer(${idx})" ${selectedAns !== null ? 'disabled' : ''} class="${btnStyle}">
+                        ${opt}
+                    </button>
+                `;
+            });
+
+            let explanationHtml = '';
+            if (selectedAns !== null) {
+                explanationHtml = `
+                    <div class="p-3.5 rounded bg-stone-100 border border-stone-300 text-xs text-stone-800">
+                        <span class="font-bold text-black">【解說】</span> ${q.explanation}
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                <h3 class="text-base sm:text-lg font-bold text-black">${q.question}</h3>
+                <div class="space-y-2 mt-3">${optionsHtml}</div>
+                ${explanationHtml}
+            `;
+
+            document.getElementById('btn-quiz-prev').disabled = currentQuizIndex === 0;
+            document.getElementById('btn-quiz-next').innerText = currentQuizIndex === quizQuestions.length - 1 ? '完成測驗' : '下一題';
+        }
+
+        function selectQuizAnswer(index) {
+            userQuizAnswers[currentQuizIndex] = index;
+            renderQuizQuestion();
+        }
+
+        function prevQuizQuestion() {
+            if (currentQuizIndex > 0) {
+                currentQuizIndex--;
+                renderQuizQuestion();
+            }
+        }
+
+        function nextQuizQuestion() {
+            if (currentQuizIndex < quizQuestions.length - 1) {
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                let score = 0;
+                userQuizAnswers.forEach((ans, idx) => {
+                    if (ans === quizQuestions[idx].answer) score++;
+                });
+                alert(`測驗完成！您答對了 ${score} / ${quizQuestions.length} 題！`);
+            }
+        }
+
+        function renderFlashcard() {
+            const p = lunXiaoData[currentCardIndex];
+            document.getElementById('card-index-indicator').innerText = `${currentCardIndex + 1} / ${lunXiaoData.length}`;
+
+            document.getElementById('card-front-text').innerText = p.rawText;
+            document.getElementById('card-front-source').innerText = p.chapter;
+
+            const fullTranslation = p.sentences.map(s => s.translation).join(' ');
+            document.getElementById('card-back-translation').innerText = fullTranslation;
+            document.getElementById('card-back-key').innerText = p.keyPoint;
+
+            document.getElementById('flashcard-container').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard-container').classList.toggle('flipped');
+        }
+
+        function prevCard() {
+            currentCardIndex = (currentCardIndex - 1 + lunXiaoData.length) % lunXiaoData.length;
+            renderFlashcard();
+        }
+
+        function nextCard() {
+            currentCardIndex = (currentCardIndex + 1) % lunXiaoData.length;
+            renderFlashcard();
+        }
+
+        function clearDictation() {
+            document.getElementById('dictate-input').value = '';
+            document.getElementById('dictate-score-card').classList.add('hidden');
+            resetDictationArea();
+        }
+
+        function resetDictationArea() {
+            const res = document.getElementById('dictate-result');
+            res.className = "w-full h-56 md:h-auto p-4 bg-stone-100 border border-stone-300 rounded font-serifTC text-base leading-relaxed overflow-y-auto custom-scrollbar flex flex-col justify-center items-center text-stone-400";
+            res.innerHTML = `
+                <i class="fa-solid fa-spell-check text-3xl mb-2"></i>
+                <p class="text-xs font-bold">點擊「開始比對」顯示結果</p>
+            `;
+            document.getElementById('dictate-score-card').classList.add('hidden');
+        }
+
+        function evaluateDictation() {
+            const sel = document.getElementById('dictate-passage-select').value;
+            let targetText = sel === "all" ? lunXiaoData.map(p => p.rawText).join('') : lunXiaoData[parseInt(sel)].rawText;
+
+            const userInput = document.getElementById('dictate-input').value;
+            const cleanTarget = targetText.replace(/[^\u4e00-\u9fa5]/g, '');
+            const cleanUser = userInput.replace(/[^\u4e00-\u9fa5]/g, '');
+
+            if (cleanUser.length === 0) {
+                alert('請先在輸入框中填寫默寫內容！');
+                return;
+            }
+
+            let matchCount = 0;
+            let resultHtml = "";
+
+            for (let i = 0; i < cleanTarget.length; i++) {
+                const targetChar = cleanTarget[i];
+                const userChar = cleanUser[i];
+
+                if (userChar === targetChar) {
+                    matchCount++;
+                    resultHtml += `<span class="text-emerald-700 font-black">${targetChar}</span>`;
+                } else if (!userChar) {
+                    resultHtml += `<span class="bg-red-200 text-red-900 underline font-bold" title="漏字">${targetChar}</span>`;
+                } else {
+                    resultHtml += `<span class="bg-amber-200 text-amber-900 underline font-bold" title="輸入錯字: ${userChar}">${targetChar}</span>`;
+                }
+            }
+
+            const accuracy = Math.round((matchCount / cleanTarget.length) * 100);
+
+            const resArea = document.getElementById('dictate-result');
+            resArea.className = "w-full h-56 md:h-auto p-4 bg-white border border-stone-300 rounded font-serifTC text-base leading-loose overflow-y-auto custom-scrollbar block";
+            resArea.innerHTML = `
+                <div class="text-[10px] text-stone-500 font-bold mb-2">圖例：<span class="text-emerald-700 font-black">正確</span> / <span class="bg-amber-200 text-amber-900 font-bold">錯字</span> / <span class="bg-red-200 text-red-900 font-bold">漏字</span></div>
+                <div>${resultHtml}</div>
+            `;
+
+            document.getElementById('dictate-percentage').innerText = `${accuracy}%`;
+            document.getElementById('dictate-score-card').classList.remove('hidden');
+        }
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            renderReaderView();
+            renderClozeView();
+        };
+    </script>
+</body>
+</html>
